@@ -1,4 +1,4 @@
-package com.epam.weatherforecast.integration;
+package com.epam.weatherforecast.controller;
 
 import com.epam.weatherforecast.controller.WeatherController;
 import com.epam.weatherforecast.exception.EntityNotFoundException;
