@@ -1,5 +1,6 @@
 package com.epam.weatherforecast.service;
 
+import com.epam.weatherforecast.config.AppProperties;
 import com.epam.weatherforecast.exception.EntityNotFoundException;
 import com.epam.weatherforecast.model.Weather;
 import com.epam.weatherforecast.model.dto.MainDTO;
@@ -36,6 +37,9 @@ public class OpenWeatherServiceTest {
     @Mock
     private RestTemplate template;
 
+    @Mock
+    private AppProperties properties;
+
     @InjectMocks
     private OpenWeatherService service;
 
@@ -58,6 +62,9 @@ public class OpenWeatherServiceTest {
                                         .build();
         final ResponseEntity<OpenWeatherDTO> response = ResponseEntity.ok(body);
 
+        when(properties.getApplicationId()).thenReturn(APPLICATION_ID);
+        when(properties.getUnits()).thenReturn(UNITS);
+        when(properties.getBaseUrl()).thenReturn(API_URL + API_VERSION + RESOURCE);
         when(template.getForEntity(BASE_URL, OpenWeatherDTO.class, cityCode, APPLICATION_ID, UNITS)).thenReturn(response);
 
         final Weather weather = service.getCurrentWeatherByCity(cityCode);
@@ -68,6 +75,9 @@ public class OpenWeatherServiceTest {
     @Test
     public void throwEntityNotFoundExceptionForInvalidCityCode() {
         String invalidCode = "INVALID";
+        when(properties.getApplicationId()).thenReturn(APPLICATION_ID);
+        when(properties.getUnits()).thenReturn(UNITS);
+        when(properties.getBaseUrl()).thenReturn(API_URL + API_VERSION + RESOURCE);
         when(template.getForEntity(BASE_URL, OpenWeatherDTO.class, invalidCode, APPLICATION_ID, UNITS)).thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
 
         Assertions.assertThrows(EntityNotFoundException.class, () -> service.getCurrentWeatherByCity(invalidCode));
