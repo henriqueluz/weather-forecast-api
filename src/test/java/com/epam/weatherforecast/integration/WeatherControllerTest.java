@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class WeatherControllerTests {
+public class WeatherControllerTest {
 
     @Autowired
     private WeatherController controller;
