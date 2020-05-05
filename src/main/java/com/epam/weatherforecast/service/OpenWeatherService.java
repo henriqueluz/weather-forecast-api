@@ -1,5 +1,6 @@
 package com.epam.weatherforecast.service;
 
+import com.epam.weatherforecast.model.Temperature;
 import com.epam.weatherforecast.model.Weather;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +10,11 @@ public class OpenWeatherService implements ForecastService {
     @Override
     public Weather getCurrentWeatherByCity(String cityCode) {
         return Weather.builder()
-                .maxTemperature(32.0)
-                .minTemperature(21.7)
-                .feelsLike(31.0)
+                .temperature(Temperature.builder()
+                                .max(31.2)
+                                .min(20.7)
+                                .feelsLike(28.9)
+                                .build())
                 .pressure(980.0)
                 .windSpeed(27.0)
                 .build();

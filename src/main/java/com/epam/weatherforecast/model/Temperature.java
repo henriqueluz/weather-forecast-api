@@ -7,10 +7,10 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class Weather {
+public class Temperature {
 
-    private Temperature temperature;
-    private final Double pressure;
-    private final Double windSpeed;
-    
+    private final Double min;
+    private final Double max;
+    private final Double feelsLike;
+
 }
