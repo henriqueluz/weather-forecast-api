@@ -1,5 +1,6 @@
 package com.epam.weatherforecast.service;
 
+import com.epam.weatherforecast.config.AppProperties;
 import com.epam.weatherforecast.exception.EntityNotFoundException;
 import com.epam.weatherforecast.model.Temperature;
 import com.epam.weatherforecast.model.Weather;
@@ -13,21 +14,17 @@ import org.springframework.web.client.RestTemplate;
 public class OpenWeatherService implements ForecastService {
 
     private final RestTemplate restTemplate;
-    private final static String API_URL = "https://api.openweathermap.org/data/";
-    private final static String API_VERSION = "2.5";
-    private final static String APPLICATION_ID = "d33f86f13c3240f09b02490ba43808b6";
-    private final static String UNITS = "metric";
-    private final static String RESOURCE = "/weather?id={cityId}&appid={appId}&units={units}";
-    private final static String BASE_URL = API_URL + API_VERSION + RESOURCE;
+    private final AppProperties properties;
 
-    public OpenWeatherService(RestTemplate restTemplate) {
+    public OpenWeatherService(RestTemplate restTemplate, AppProperties properties) {
         this.restTemplate = restTemplate;
+        this.properties = properties;
     }
 
     @Override
     public Weather getCurrentWeatherByCity(String cityCode) throws EntityNotFoundException {
         try {
-        ResponseEntity<OpenWeatherDTO> response = this.restTemplate.getForEntity(BASE_URL, OpenWeatherDTO.class, cityCode, APPLICATION_ID, UNITS);
+        ResponseEntity<OpenWeatherDTO> response = this.restTemplate.getForEntity(properties.getBaseUrl(), OpenWeatherDTO.class, cityCode, properties.getApplicationId(), properties.getUnits());
         OpenWeatherDTO currentWeather = response.getBody();
 
         return Weather.builder()
