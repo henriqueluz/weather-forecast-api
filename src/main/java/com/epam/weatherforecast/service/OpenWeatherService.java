@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import springfox.documentation.annotations.Cacheable;
 
 @Service
 public class OpenWeatherService implements ForecastService {
@@ -22,6 +23,7 @@ public class OpenWeatherService implements ForecastService {
     }
 
     @Override
+    @Cacheable("weather")
     public Weather getCurrentWeatherByCity(String cityCode) throws EntityNotFoundException {
         try {
         ResponseEntity<OpenWeatherDTO> response = this.restTemplate.getForEntity(properties.getBaseUrl(), OpenWeatherDTO.class, cityCode, properties.getApplicationId(), properties.getUnits());
