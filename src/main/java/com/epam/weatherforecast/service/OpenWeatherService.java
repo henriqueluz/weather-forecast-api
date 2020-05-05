@@ -1,10 +1,12 @@
 package com.epam.weatherforecast.service;
 
+import com.epam.weatherforecast.exception.EntityNotFoundException;
 import com.epam.weatherforecast.model.Temperature;
 import com.epam.weatherforecast.model.Weather;
 import com.epam.weatherforecast.model.dto.OpenWeatherDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -23,7 +25,8 @@ public class OpenWeatherService implements ForecastService {
     }
 
     @Override
-    public Weather getCurrentWeatherByCity(String cityCode) {
+    public Weather getCurrentWeatherByCity(String cityCode) throws EntityNotFoundException {
+        try {
         ResponseEntity<OpenWeatherDTO> response = this.restTemplate.getForEntity(BASE_URL, OpenWeatherDTO.class, cityCode, APPLICATION_ID, UNITS);
         OpenWeatherDTO currentWeather = response.getBody();
 
@@ -36,5 +39,8 @@ public class OpenWeatherService implements ForecastService {
                 .pressure(currentWeather.getMain().getPressure())
                 .windSpeed(currentWeather.getWind().getSpeed())
                 .build();
+        } catch (HttpClientErrorException e) {
+            throw new EntityNotFoundException(e.getMessage());
+        }
     }
 }

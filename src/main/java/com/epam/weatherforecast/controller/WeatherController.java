@@ -1,5 +1,6 @@
 package com.epam.weatherforecast.controller;
 
+import com.epam.weatherforecast.exception.EntityNotFoundException;
 import com.epam.weatherforecast.model.Weather;
 import com.epam.weatherforecast.service.ForecastService;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class WeatherController {
     }
 
     @GetMapping("/weather")
-    public ResponseEntity<Weather> getCurrentWeather(@RequestParam("city") String city) {
+    public ResponseEntity<Weather> getCurrentWeather(@RequestParam("city") String city) throws EntityNotFoundException {
         return ResponseEntity.ok(service.getCurrentWeatherByCity(city));
     }
 
