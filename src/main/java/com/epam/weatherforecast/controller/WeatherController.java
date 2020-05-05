@@ -15,17 +15,18 @@ public class WeatherController {
 
     private ForecastService service;
 
+    public WeatherController(ForecastService service) {
+        this.service = service;
+    }
+
     @GetMapping("/weather")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Get current weather for a given city"),
             @ApiResponse(code = 404, message = "City not found"),
+            @ApiResponse(code = 400, message = "Request String parameter 'city' is not present"),
     })
     public ResponseEntity<Weather> getCurrentWeather(@RequestParam("city") String city) throws EntityNotFoundException {
         return ResponseEntity.ok(service.getCurrentWeatherByCity(city));
-    }
-
-    public WeatherController(ForecastService service) {
-        this.service = service;
     }
 
 }
